@@ -29,7 +29,20 @@ def twoSum(nums, target):
 '''
 2. Add Two Numbers
 
+You are given two non-empty linked lists representing two non-negative integers.
+The digits are stored in reverse order and each of their nodes contain a single digit.
+Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+
 '''
+
+def addTwoNumbers2(l1, l2):
+    cur_pos = 0
+
 
 
 # Definition for singly-linked list.
@@ -83,6 +96,7 @@ class Solution(object):
 
 def addTwoNumbers(l1, l2):
     first_l1 = l1
+    last_l1 = l1
     jin_wei = 0
     while l1 or l2:
         if l1 and l2:
@@ -90,11 +104,13 @@ def addTwoNumbers(l1, l2):
             if l1.val > 9:
                 jin_wei = 1
                 l1.val -= 10
-                if l1.next is None and l2.next is None:
+                if (l1.next is None) and (l2.next is None):
+                    last_l1 = l1
                     l1.next = ListNode(jin_wei)
                     return first_l1
             else:
                 jin_wei = 0
+            last_l1 = l1
             l1 = l1.next
             l2 = l2.next
         else:
@@ -105,29 +121,62 @@ def addTwoNumbers(l1, l2):
                     l1 = ListNode(cur_num - 10)
                 else:
                     jin_wei = 0
-                    l1 = ListNode(l2.val)
+                    l1 = ListNode(cur_num)
+                last_l1.next = l1
+                l2 = l2.next
             else:
                 cur_num = l1.val + jin_wei
                 if cur_num > 9:
                     jin_wei = 1
-                    l1.val -= 10
+                    l1.val = cur_num -10
                 else:
                     jin_wei = 0
+                    l1.val = cur_num
+            last_l1 = l1
             l1 = l1.next
     if jin_wei > 0:
-        l1.next = ListNode(jin_wei)
+        last_l1.next = ListNode(jin_wei)
     return first_l1
 
+'''
+
+[8,6]
+[6,4,8]
+'''
+
+'''
+
+3. Longest Substring Without Repeating Character
+
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+
+Given "bbbbb", the answer is "b", with the length of 1.
+
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring
+, "pwke" is a subsequence and not a substring.
+
+'''
+def lengthOfLongestSubstring(s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    long_sub = []
+    last_result = 0
+    for i in s:
+        if not i in long_sub:
+            long_sub.append(i)
+        else:
+            if len(long_sub) > last_result:
+                last_result = len(long_sub)
+            long_sub = long_sub[long_sub.index(i)+1:]
+            long_sub.append(i)
+    return last_result if last_result > len(long_sub) else len(long_sub)
 
 if __name__ == '__main__':
-    demodata1 = ListNode(0)
-    # demodata1.next = ListNode(4)
-    # demodata1.next.next = ListNode(3)
-    demodata2 = ListNode(7)
-    demodata2.next = ListNode(3)
-    # demodata2.next.next = ListNode(4)
-    resultNode = addTwoNumbers(demodata1, demodata2)
-    while resultNode:
-        print resultNode.val
-        resultNode = resultNode.next
+    print lengthOfLongestSubstring('asdqweasd')
     pass
